@@ -1,17 +1,27 @@
 import { useMemo, useState } from "react";
-import "./App.css";
 import { useCopyToClipboard } from "./hooks/useCopyToClipboard";
+import {
+  Center,
+  Text,
+  Heading,
+  Container,
+  Button,
+  Textarea,
+  VStack,
+  useNotice,
+} from "@yamada-ui/react";
 
 function App() {
   const [, copy] = useCopyToClipboard();
+  const notice = useNotice();
 
   const handleCopy = (text: string) => () => {
     copy(text)
       .then(() => {
-        alert("コピーしました");
+        notice({ title: "コピーしました", status: "success" });
       })
       .catch(() => {
-        alert("コピーに失敗しました");
+        notice({ title: "コピーに失敗しました", status: "error" });
       });
   };
 
@@ -70,41 +80,60 @@ function App() {
   }, [rotatedTextArray]);
 
   return (
-    <>
-      <h1>縦書きするやつ</h1>
-      <h2
-        style={{
-          fontFamily: "sans-serif",
-          fontSize: "24px",
-        }}
-      >
-        入力
-      </h2>
-      <textarea
-        defaultValue={rawText}
-        onChange={(e) => setRawText(e.target.value)}
-        style={{ width: "400px", height: "200px" }}
-      />
+    <Container>
+      <VStack>
+        <Heading as="h1">
+          <Center>
+            <i
+              style={{
+                color: "#C91333",
+                fontSize: "1.5rem",
+                marginRight: "0.5rem",
+              }}
+            >
+              ■
+            </i>
+            縦書きするやつ
+          </Center>
+        </Heading>
+        <Heading as="h2">
+          <Center>入力</Center>
+        </Heading>
+        <Textarea
+          autosize
+          minRows={4}
+          defaultValue={rawText}
+          onChange={(e) => setRawText(e.target.value)}
+        ></Textarea>
+      </VStack>
 
-      <h2>
-        <pre
-          style={{
-            fontFamily: "sans-serif",
-            fontSize: "24px",
-          }}
-        >{`結
-果`}</pre>
-      </h2>
-      <pre
-        style={{
-          fontFamily: "sans-serif",
-          fontSize: "16px",
-        }}
-      >
-        {rotatedText}
-      </pre>
-      <button onClick={handleCopy(rotatedText)}>コピー</button>
-    </>
+      <VStack>
+        <Heading as="h2">
+          <Center>
+            <Text
+              as="pre"
+              style={{
+                fontFamily: "sans-serif",
+              }}
+            >{`結
+果`}</Text>
+          </Center>
+        </Heading>
+        <Center>
+          <Text
+            as="pre"
+            style={{
+              fontFamily: "sans-serif",
+            }}
+          >
+            {rotatedText}
+          </Text>
+        </Center>
+        <Center>
+          <Button onClick={handleCopy(rotatedText)}>コピー</Button>
+        </Center>
+      </VStack>
+    </Container>
   );
 }
 
