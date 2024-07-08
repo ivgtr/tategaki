@@ -3,7 +3,7 @@ import "./App.css";
 import { useCopyToClipboard } from "./hooks/useCopyToClipboard";
 
 function App() {
-  const [copiedText, copy] = useCopyToClipboard();
+  const [, copy] = useCopyToClipboard();
 
   const handleCopy = (text: string) => () => {
     copy(text)
